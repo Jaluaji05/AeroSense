@@ -64,9 +64,24 @@ class AqiDashboard extends StatefulWidget {
 }
 
 class _AqiDashboardState extends State<AqiDashboard> {
-  final AqiData myLocation = AqiData(location: "Surakarta", pm25: 150);
+  final AqiData myLocation = AqiData(location: "Surakarta", pm25: 120);
 
-  final String lastUpdated = "08 Apr 2026, 09.00 WIB";
+  String get lastUpdated {
+    final now = DateTime.now();
+
+    const List<String> monthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
+
+    final day = now.day.toString().padLeft(2, '0');
+    final month = monthNames[now.month - 1];
+    final year = now.year;
+    final hour = now.hour.toString().padLeft(2, '0');
+    final minute = now.minute.toString().padLeft(2, '0');
+
+    return "$day $month $year, $hour.$minute WIB";
+  }
 
   List<AqiData> savedCities = [
     AqiData(location: "Kemayoran, Jakarta", pm25: 155),
@@ -364,7 +379,7 @@ class _AqiDashboardState extends State<AqiDashboard> {
 
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                        (context, index) {
                       final data = savedCities[index];
                       return Dismissible(
                         key: Key(data.location),
